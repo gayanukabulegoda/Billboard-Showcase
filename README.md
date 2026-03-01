@@ -1,261 +1,110 @@
-# 🌐 Billboard Showcase - 3D Billboard Experience
+# Billboard Showcase
 
-<div align="center">
+An interactive 3D proof of concept built with Next.js, TypeScript, and Babylon.js. It explores loading GLB billboards, applying image and video textures, and rotating models within a browser-rendered scene.
 
-![Babylon.js](https://img.shields.io/badge/Babylon.js-8.29.2-blue?style=for-the-badge&logo=babylon.js)
-![Next.js](https://img.shields.io/badge/Next.js-15.5.4-black?style=for-the-badge&logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)
-![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)
+[Live demo](https://billboard-showcase.vercel.app/) · [Portfolio](https://www.grbulegoda.com)
 
-**An immersive 3D experience showcasing dynamic billboards with video textures, interactive elements, and real-time animations.**
+![Browser preview of the image, emissive, and video billboard scene](docs/scene-preview.png)
 
-[🚀 Live Demo](https://billboard-showcase.vercel.app/)
+Preview captured from the public demo. Camera position and animated textures change during interaction.
 
-</div>
+## What it demonstrates
 
----
+- Four billboard model configurations: static imagery, blue emissive materials, video textures, and rotating video billboards.
+- A shared GLB loader that finds named meshes and applies materials.
+- Orbit-camera interaction, scene lighting, and a resize-aware canvas.
+- Mesh inspection through browser-console logging.
+- Engine disposal and resize-listener cleanup when the scene component unmounts.
 
-## ✨ Features
+This is a focused rendering experiment, not an advertising platform or production asset-management system.
 
-### 🎬 **Dynamic Video Billboards**
+## Explore the code
 
-- **Real-time video textures** on 3D billboard models
-- **Multiple video formats** support (MP4, WebM)
-- **Seamless video playback** with autoplay and looping
-- **Cross-browser compatibility** for video rendering
-
-### 🎨 **Interactive 3D Scene**
-
-- **Four distinct billboard types** with unique characteristics
-- **Static image billboards** with high-quality textures
-- **Glowing border effects** with dynamic blue highlights
-- **Rotating video billboards** with continuous horizontal rotation
-- **Click-to-inspect** mesh interaction system
-
-### 🎯 **Advanced 3D Rendering**
-
-- **Professional lighting** with hemispheric light setup
-- **Optimized camera controls** with ArcRotateCamera
-- **Responsive design** that adapts to all screen sizes
-- **Smooth 60fps animations** with efficient render loops
-
-### 🛠️ **Developer Experience**
-
-- **Modular GLB loader** utility for easy 3D model management
-- **TypeScript support** with full type safety
-- **Clean architecture** with separated concerns
-- **Hot reload** development environment
-
----
-
-## 🏗️ Architecture
-
-### **Core Components**
-
-```
-src/
-├── components/
-│   └── BabylonScene.tsx      # Main 3D scene component
-├── utils/
-│   └── glbLoader.ts          # GLB model loading utility
-└── app/
-    ├── layout.tsx            # App layout wrapper
-    └── page.tsx              # Main page component
+```mermaid
+flowchart LR
+    Page[Next.js page] --> Scene[BabylonScene]
+    Scene --> Loader[GLB loader]
+    Loader --> Models[GLB models]
+    Loader --> Textures[Image and video materials]
+    Scene --> Canvas[Camera and render loop]
 ```
 
-### **3D Assets Structure**
+| File / directory | Responsibility |
+| --- | --- |
+| [src/app/page.tsx](src/app/page.tsx) | Page entry point |
+| [src/components/BabylonScene.tsx](src/components/BabylonScene.tsx) | Camera, lighting, model configuration, animation, lifecycle |
+| [src/utils/glbLoader.ts](src/utils/glbLoader.ts) | GLB import and named-mesh texture assignment |
+| [public/3D assets](public/3D%20assets) | Billboard models |
+| [public/images](public/images) / [public/videos](public/videos) | Texture sources |
 
-```
-public/
-├── 3D assets/
-│   ├── billboard.glb         # Static image billboard
-│   ├── billboardGlow.glb     # Glowing border billboard
-│   ├── billboardForVideos.glb # Video billboard
-│   └── billboardRotate.glb   # Rotating video billboard
-├── images/
-│   ├── bad_meow_01.jpg       # Static textures
-│   └── bad_meow_02.jpg
-└── videos/
-    ├── crypto_life.mp4       # Video textures
-    ├── crazy_run.mp4
-    ├── hehe_emoji_video.mp4
-    └── oops_emoji_video.mp4
-```
+## Run locally
 
----
+Use Node.js 22 and npm, or Bun with the committed `bun.lock`. A WebGL-capable browser and hardware acceleration are needed to view the scene.
 
-## 🚀 Quick Start
-
-### **Prerequisites**
-
-- Node.js 18+ or Bun
-- Modern web browser with WebGL support
-
-### **Installation**
-
-```bash
-# Clone the repository
+```sh
 git clone https://github.com/gayanukabulegoda/Billboard-Showcase.git
 cd Billboard-Showcase
-
-# Install dependencies
 npm install
-# or
-bun install
-
-# Start development server
 npm run dev
-# or
-bun dev
 ```
 
-### **Production Build**
+Open `http://localhost:3000`. There are no required environment variables or backend services.
 
-```bash
-# Build for production
-npm run build
-# or
-bun run build
+For installation using the committed dependency lockfile:
 
-# Start production server
-npm start
-# or
-bun start
+```sh
+bun install --frozen-lockfile
+bun run dev
 ```
 
----
+Choose one package manager for your checkout. The repository tracks a Bun lockfile, not an npm lockfile.
 
-## 🎮 Usage
+## Controls
 
-### **Scene Navigation**
+| Action | Result |
+| --- | --- |
+| Drag the canvas | Orbit the camera |
+| Mouse wheel or trackpad scroll | Zoom |
+| Select a mesh | Inspect the mesh information in the browser console |
 
-- **Mouse drag** - Rotate camera around the scene
-- **Mouse wheel** - Zoom in/out
-- **Click on meshes** - Inspect mesh details in console
+Videos are configured to loop, play inline, and remain muted. Playback can still be blocked by browser/device policies. If a surface is blank, inspect the network and console for asset-loading or playback errors.
 
-### **Billboard Types**
+## Change the scene
 
-| Billboard    | Type              | Features                       |
-| ------------ | ----------------- | ------------------------------ |
-| **Static**   | Image textures    | High-quality static images     |
-| **Glow**     | Image + Effects   | Blue glowing borders           |
-| **Video**    | Video textures    | Real-time video playback       |
-| **Rotating** | Video + Animation | Continuous horizontal rotation |
+Edit `glbConfigs` in [BabylonScene.tsx](src/components/BabylonScene.tsx). Each entry specifies a model and texture assignments:
 
----
-
-## 🛠️ Development
-
-### **Adding New Billboards**
-
-1. **Add GLB model** to `public/3D assets/`
-2. **Configure in `BabylonScene.tsx`**:
-
-```typescript
+```ts
 {
-  glbFile: "your-model.glb",
-  textures: [
-    {
-      meshName: "MeshName_primitive1",
-      texturePath: "/path/to/texture.jpg",
-      materialName: "uniqueMaterialName",
-      isVideo: false, // or true for videos
-    }
-  ]
+  glbFile: "billboard.glb",
+  textures: [{
+    meshName: "Billboard_1920x1080_001_primitive2",
+    texturePath: "/images/bad_meow_01.jpg",
+    materialName: "customMaterial",
+    isVideo: false,
+  }],
 }
 ```
 
-### **Custom Materials**
+The mesh name must match the imported GLB. If it does not, the loader logs the available mesh names. Use `isVideo: true` for video textures. Material names containing `glow` enable the existing blue emissive-material treatment; this is not a border-only glow shader.
 
-```typescript
-// In glbLoader.ts
-if (materialName.includes("glow")) {
-  material.diffuseColor = new Color3(0.0, 0.5, 1.0);
-  material.emissiveColor = new Color3(0.0, 0.3, 0.8);
-  // Add custom glow effects
-}
+## Checks and current limits
+
+```sh
+npm run lint
+npm run build
+npm start
 ```
 
----
+`npm start` serves the output of a successful build. These scripts are defined in `package.json`; no automated interaction or performance test suite is supplied.
 
-## 🎨 Customization
+- Frame rate depends on device, asset size, and video decoding. There is no published 60 FPS benchmark or verified browser-version compatibility matrix.
+- The current implementation imports a model for each texture assignment. Consolidating imports is a potential optimization.
+- Rotation advances per rendered frame; it is not delta-time based.
+- The loader appends hidden video elements, and the scene's cleanup does not explicitly remove those DOM elements or cancel the delayed rotation callback.
+- There is no explicit LOD or asset-compression pipeline implemented in these source files.
 
-### **Camera Settings**
+These are useful next steps for developing the experiment further. The current README describes the implementation rather than claiming those improvements are complete.
 
-```typescript
-const camera = new ArcRotateCamera(
-  "camera",
-  -Math.PI / 1.8, // Horizontal rotation
-  Math.PI / 3, // Vertical angle
-  15, // Distance
-  new Vector3(12, 0, 0), // Target position
-  scene
-);
-```
+## License and author
 
-### **Lighting Configuration**
-
-```typescript
-const light = new HemisphericLight("light", new Vector3(0, 1, 0), scene);
-light.intensity = 1.5; // Adjust brightness
-```
-
-### **Scene Background**
-
-```typescript
-scene.clearColor = new Color4(0.75, 0.75, 0.75, 1.0); // Light gray
-```
-
----
-
-## 🚀 Deployment
-
-### **Vercel**
-
-1. Push to GitHub
-2. Connect repository to Vercel
-3. Deploy automatically
-
----
-
-## 📊 Performance
-
-### **Optimizations**
-
-- **Efficient render loops** with 60fps target
-- **Texture compression** for faster loading
-- **LOD (Level of Detail)** for complex models
-- **Frustum culling** for off-screen objects
-
-### **Browser Support**
-
-- ✅ Chrome 80+
-- ✅ Firefox 75+
-- ✅ Safari 13+
-- ✅ Edge 80+
-
----
-
-## 🤝 Contributing
-
-1. **Fork the repository**
-2. **Create feature branch**: `git checkout -b feature/amazing-feature`
-3. **Commit changes**: `git commit -m 'Add amazing feature'`
-4. **Push to branch**: `git push origin feature/amazing-feature`
-5. **Open Pull Request**
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-<div align="center">
-
-**Developed by Gayanuka Bulegoda**
-
-[⭐ Star this repo](https://github.com/gayanukabulegoda/Billboard-Showcase.git) • [🐛 Report Bug](https://github.com/gayanukabulegoda/Billboard-Showcase/issues) • [💡 Request Feature](https://github.com/gayanukabulegoda/Billboard-Showcase/issues)
-
-</div>
+[MIT](LICENSE) · [Gayanuka Bulegoda](https://www.grbulegoda.com)
